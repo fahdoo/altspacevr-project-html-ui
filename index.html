@@ -37,8 +37,8 @@
 			</ul>
 
 			<div id="space-edit" class="modal fade">
-				<!-- ko if: spaces.editable -->
-			  <div class="modal-dialog modal-lg" role="document" data-bind="with: spaces.editable">
+				<!-- ko if: spaces.editableModel -->
+			  <div class="modal-dialog modal-lg" role="document" data-bind="with: spaces.editableModel">
 			    <div class="modal-content">
 			      <div class="modal-header">
 			        <h5 class="modal-title">Edit <span data-bind="text: title"></span></h5>
@@ -48,6 +48,12 @@
 			      </div>
 			      <div class="modal-body">
 							<form>
+								<div class="form-group">
+									<label for="space-created-by">Created By</label>
+									<!-- ko if: typeof createdBy() != 'undefined' -->
+									<p id="space-created-by" class="form-control-static" data-bind="text: createdBy().fullName"></p>
+									<!-- /ko -->
+								</div>
 							  <div class="form-group">
 							    <label for="space-title">Title</label>
 							    <input type="text" class="form-control" id="space-title" placeholder="Enter title" data-bind="textInput: title">
@@ -73,6 +79,10 @@
 										<input type="checkbox" class="form-check-input" data-bind="checked: featured">
 										Featured?
 									</label>
+								</div>
+								<div class="form-group">
+									<label for="space-members">Example multiple select</label>
+									<select class="form-control" multiple="true" data-bind="options: Users.all, optionsText: 'fullName', selectedOptions: members"></select>
 								</div>
 							</form>
 			      </div>
