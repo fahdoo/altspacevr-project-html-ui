@@ -62,6 +62,7 @@
 							    <label for="space-description">Description</label>
 							    <textarea class="form-control" id="space-description" rows="3" data-bind="textInput: description"></textarea>
 							  </div>
+								<hr />
 								<div class="form-check">
 									<label class="form-check-label">
 										<input type="checkbox" class="form-check-input" data-bind="checked: welcome">
@@ -80,8 +81,9 @@
 										Featured?
 									</label>
 								</div>
+								<hr />
 								<div class="form-group">
-									<label for="space-members">Example multiple select</label>
+									<label for="space-members">Members</label>
 									<select class="form-control" multiple="true" data-bind="options: Users.all, optionsText: 'fullName', selectedOptions: members"></select>
 								</div>
 							</form>
