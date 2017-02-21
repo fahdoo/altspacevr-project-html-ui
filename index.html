@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+	<head>
+		<title>Altspace Space Admin</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.slim.min.js"></script>
+	</head>
+	<body class="as-admin">
+		<header>
+			<div class="as-heading">
+				Altspace Space Admin
+			</div>
+		</header>
+
+    <main>
+      <ul data-bind="foreach: spaces.all">
+				<li class="as-card as-card-space">
+					<div class="as-space-title" data-bind="text: title"></div>
+					<div class="as-space-description" data-bind="text: description"></div>
+					<div class="as-space-created-by" data-bind="text: created_by().full_name"></div>
+					<div class="as-space-welcome" data-bind="if: welcome">Welcome</div>
+					<div class="as-space-private" data-bind="if: private">Private</div>
+					<div class="as-space-featured" data-bind="if: featured">Featured</div>
+
+					<ul class="as-space-members" data-bind="foreach: members">
+						<li class="as-space-member">
+							<div class="as-fullname" data-bind="text: full_name"></div>
+						</li>
+					</ul>
+				</li>
+			</ul>
+    </main>
+		<script src="/lib/data/Data.js"></script>
+		<script src="/lib/models.js"></script>
+    <script src="/lib/index.js"></script>
+	</body>
+</html>
