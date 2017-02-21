@@ -19,6 +19,7 @@
       <ul data-bind="foreach: spaces.all">
 				<li class="as-card as-card-space">
 					<a href="#" data-bind="click: edit">Edit</a>
+					<a href="#" data-bind="click: remove">Delete</a>
 					<div class="as-space-title" data-bind="text: title"></div>
 					<div class="as-space-description" data-bind="text: description"></div>
 					<!-- ko if: typeof createdBy() != 'undefined' -->
