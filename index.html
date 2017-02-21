@@ -9,33 +9,84 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/css/tether.min.css" />
 	</head>
 	<body class="as-admin">
-		<header>
-			<div class="as-heading">
-				Altspace Space Admin
+		<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary bg-faded">
+			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<a class="navbar-brand" href="#">Altspace</a>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Space Admin <span class="sr-only">(current)</span></a>
+					</li>
+				</ul>
 			</div>
+		</nav>
+
+		<header class="container-fluid pl-5 pt-2">
+			<h2 >Space Admin</h2>
 		</header>
 
-    <main>
-      <ul data-bind="foreach: spaces.all">
-				<li class="as-card as-card-space">
-					<a href="#" data-bind="click: edit">Edit</a>
-					<a href="#" data-bind="click: remove">Delete</a>
-					<div class="as-space-title" data-bind="text: title"></div>
-					<div class="as-space-description" data-bind="text: description"></div>
-					<!-- ko if: typeof createdBy() != 'undefined' -->
-					<div class="as-space-created-by" data-bind="text: createdBy().fullName"></div>
-					<!-- /ko -->
-					<div class="as-space-welcome" data-bind="if: welcome">Welcome</div>
-					<div class="as-space-private" data-bind="if: private">Private</div>
-					<div class="as-space-featured" data-bind="if: featured">Featured</div>
-
-					<ul class="as-space-members" data-bind="foreach: members">
-						<li class="as-space-member">
-							<div class="as-fullname" data-bind="text: fullName"></div>
-						</li>
-					</ul>
-				</li>
-			</ul>
+    <main class="container-fluid px-5">
+			<div class="btn btn-group pl-0" data-bind="with: spaces">
+				<a href="#" class="btn btn-secondary btn-sm" data-bind="click: newModel">Create new Space</a>
+			</div>
+			<div class="card">
+				<table class="table table-hover mb-0">
+					<thead>
+						<th class="border-top-0">Space</th>
+						<th class="border-top-0">Creator</th>
+						<th class="border-top-0">Flags</th>
+						<th class="border-top-0">Members</th>
+						<th class="border-top-0"></th>
+					</thead>
+					<tbody data-bind="foreach: spaces.all">
+						<tr>
+							<td>
+								<a class="card-title as-space-title" href="#" data-bind="text: title"></a>
+								<p class="card-text as-space-description" data-bind="text: description"></p>
+							</td>
+							<td>
+								<!-- ko if: typeof createdBy() != 'undefined' -->
+								<a href="#" data-bind="text: createdBy().fullName"></a>
+								<!-- /ko -->
+							</td>
+							<td>
+								<span class="badge badge-primary" data-bind="visible: welcome">Welcome</span>
+								<span class="badge badge-success" data-bind="visible: featured">Featured</span>
+								<span class="badge badge-default" data-bind="visible: private">Private</span>
+							</td>
+							<td>
+								<!-- ko if: members().length > 0 -->
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Members
+									</button>
+									<div class="dropdown-menu" data-bind="foreach: members">
+										<a class="dropdown-item" href="#" data-bind="text: fullName"></a>
+									</div>
+								</div>
+								<!-- /ko -->
+								<!-- ko if: members().length == 0 -->
+									<span class="text-muted">Open to all</span>
+								<!-- /ko -->
+							</td>
+							<td>
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Actions
+									</button>
+									<div class="dropdown-menu">
+										<a class="dropdown-item" href="#" data-bind="click: edit">Edit</a>
+										<a class="dropdown-item" href="#" data-bind="click: remove">Delete</a>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 
 			<div id="space-edit" class="modal fade">
 				<!-- ko if: spaces.editableModel -->
@@ -84,7 +135,7 @@
 								</div>
 								<hr />
 								<div class="form-group">
-									<label for="space-members">Members</label>
+									<label for="space-members">Members <small><a href="#" data-bind="click: clearMembers">Clear</a></small></label>
 									<select class="form-control" multiple="true" data-bind="options: Users.all, optionsText: 'fullName', selectedOptions: members"></select>
 								</div>
 							</form>
