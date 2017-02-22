@@ -15,6 +15,16 @@ header h1 {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+.space-member-circle {
+  width: 50px;
+  height: 50px;
+}
+
+.space-created-by-circle {
+  width: 25px;
+  height: 25px;
+}
+
 /**
   * Gradients
   * Source: https://uigradients.com/

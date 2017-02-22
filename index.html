@@ -162,21 +162,8 @@
 					<div class="card-block">
 						<a class="h4 card-title" data-bind="click: edit, text: title"></a>
 						<p class="card-text" data-bind="text: description"></p>
-						<div class="btn-group" role="group">
-
-							<!-- ko if: members().length > 0 -->
-							<div class="btn-group" role="group">
-								<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Members
-								</button>
-								<div class="dropdown-menu" data-bind="foreach: members">
-									<a class="dropdown-item" href="#">
-										<span data-bind="text: fullName"></span>
-										<span class="badge badge-default" data-bind="visible: admin">Admin</span>
-									</a>
-								</div>
-							</div>
-							<!-- /ko -->
+						<div class="btn-group" role="group" data-bind="foreach: members">
+							<img data-bind="attr: {src: image, title: fullName}" class="space-member-circle rounded-circle mr-2" data-toggle="tooltip" data-placement="top" />
 						</div>
 					</div>
 					<!-- ko if: tags().length > 0 -->
@@ -187,7 +174,8 @@
 					<div class="card-footer text-muted">
 						<!-- ko if: typeof createdBy() != 'undefined' -->
 						<small>
-							Created by <a href="#" data-bind="text: createdBy().fullName"></a>
+							<img data-bind="attr: {src: createdBy().image}" class="space-created-by-circle rounded-circle" />
+							<span data-bind="text: createdBy().fullName"></span>
 							<span class="badge badge-default" data-bind="visible: createdBy().admin()">Admin</span>
 						</small>
 						<!-- /ko -->
