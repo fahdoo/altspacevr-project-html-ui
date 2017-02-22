@@ -5,11 +5,14 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 		<title>Altspace Space Admin</title>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/css/tether.min.css" />
+		<link rel="stylesheet" href="./stylesheets/main.css" />
 	</head>
-	<body class="as-admin">
-		<nav class="navbar navbar-toggleable-md navbar-inverse bg-primary bg-faded px-5">
+	<body class="as-admin gradient-ash">
+		<nav class="navbar navbar-toggleable-md bg-faded px-5">
 			<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -24,113 +27,101 @@
 			</div>
 		</nav>
 
-		<header class="jumbotron jumbotron-fluid text-center">
-			<h1 class="display-5 px-3">Space Admin</h1>
+		<header class="p-5 text-center">
+			<h1 class="display-5">Space Admin</h1>
+			<div class="btn btn-group pl-0" data-bind="with: spaces">
+				<a href="#" class="btn btn-success btn-lg" data-bind="click: newModel">Create Space</a>
+			</div>
 		</header>
 
     <main class="container-fluid px-5">
-			<div class="btn btn-group pl-0" data-bind="with: spaces">
-				<a href="#" class="btn btn-secondary btn-sm" data-bind="click: newModel">Create new Space</a>
-			</div>
-			<div class="card">
-				<table class="table table-hover mb-0">
-					<thead>
-						<th class="border-top-0">Space</th>
-						<th class="border-top-0">Creator</th>
-						<th class="border-top-0">Flags</th>
-						<th class="border-top-0">Members</th>
-						<th class="border-top-0"></th>
-					</thead>
-					<tbody data-bind="foreach: spaces.all">
-						<tr>
-							<td>
-								<a class="card-title as-space-title" href="#" data-bind="text: title"></a>
-								<p class="card-text as-space-description" data-bind="text: description"></p>
-							</td>
-							<td>
-								<!-- ko if: typeof createdBy() != 'undefined' -->
-								<a href="#" data-bind="text: createdBy().fullName"></a>
-								<!-- /ko -->
-							</td>
-							<td>
-								<span class="badge badge-primary text-uppercase" data-bind="visible: welcome">Welcome</span>
-								<span class="badge badge-success text-uppercase" data-bind="visible: featured">Featured</span>
-								<span class="badge badge-default text-uppercase" data-bind="visible: private">Private</span>
-							</td>
-							<td>
-								<!-- ko if: members().length > 0 -->
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Members
-									</button>
-									<div class="dropdown-menu" data-bind="foreach: members">
-										<a class="dropdown-item" href="#" data-bind="text: fullName"></a>
-									</div>
-								</div>
-								<!-- /ko -->
-								<!-- ko if: members().length == 0 -->
-									<span class="text-muted">Open to all</span>
-								<!-- /ko -->
-							</td>
-							<td>
-								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Actions
-									</button>
-									<div class="dropdown-menu">
-										<a class="dropdown-item" href="#" data-bind="click: edit">Edit</a>
-										<a class="dropdown-item" href="#" data-bind="click: remove">Delete</a>
-									</div>
-								</div>
-							</td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="row justify-content-sm-center" data-bind="visible: !spaces.loaded()">
+				<div class="col-sm-3">
+					<div class="card">
+						<div class="card-block">
+							<span class="fa fa-circle-o-notch fa-spin fa-fw"></span>
+							Loading spaces...
+						</div>
+					</div>
+				</div>
 			</div>
 
-			<div id="space-edit" class="modal fade">
-				<!-- ko if: spaces.editableModel -->
-			  <div class="modal-dialog modal-lg" role="document" data-bind="with: spaces.editableModel">
-			    <div class="modal-content">
-			      <div class="modal-header">
-			        <h5 class="modal-title"><span data-bind="text: id ? 'Edit ' + title() : 'New Space'"></span></h5>
-			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			          <span aria-hidden="true">&times;</span>
-			        </button>
-			      </div>
-			      <div class="modal-body">
+			<div class="btn-toolbar justify-content-between mb-3" data-bind="visible: spaces.loaded()" style="display: none;">
+				<div class="btn-group">
+				  <label class="btn btn-info mb-0" data-bind="css: {active: spaces.viewMode() == 'cards'}">
+				    <input type="radio" name="view-mode-options" id="option-spaces-card" autocomplete="off" value="cards" data-bind="checked: spaces.viewMode" style="display: none;">
+						<span class="fa fa-fw fa-window-maximize"></span> Cards
+				  </label>
+				  <label class="btn btn-info mb-0" data-bind="css: {active: spaces.viewMode() == 'table'}">
+				    <input type="radio" name="view-mode-options" id="option-spaces-table" autocomplete="off" value="table" data-bind="checked: spaces.viewMode" style="display: none;">
+						<span class="fa fa-fw fa-list"></span> Table
+				  </label>
+				</div>
+				<div class="btn-group" data-bind="visible: spaces.selected().length > 0, with: spaces">
+					<button type="button" class="btn btn-danger" data-bind="click: deleteSelected">Delete <span data-bind="text: selected().length" class="badge badge-default"></span></button>
+				</div>
+				<div class="input-group">
+					<input type="text" class="form-control" data-bind="textInput: spaces.query" placeholder="Filter..."/>
+				</div>
+			</div>
+
+			<div data-bind="template: { name: spaces.activeTemplate }"></div>
+
+			<div data-bind="template: 'spaces-edit-template'"></div>
+    </main>
+
+		<!-- TEMPLATES -->
+
+		<script id="spaces-edit-template" type="text/template">
+			<div id="space-edit-modal" class="modal fade" data-bind="if: spaces.editableModel">
+				<div class="modal-dialog modal-lg" role="document" data-bind="with: spaces.editableModel">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title">
+								<div data-bind="text: id ? 'Edit ' + title() : 'New Space'"></div>
+								<!-- ko if: typeof createdBy() != 'undefined' -->
+								<small class="text-muted">Created by
+									<span id="space-created-by" data-bind="text: createdBy().fullName"></span>
+									<span class="badge badge-default" data-bind="visible: createdBy().admin">Admin</span>
+								</small>
+								<!-- /ko -->
+							</h5>
+
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
 							<form>
 								<div class="form-group">
-									<label for="space-created-by">Created By</label>
-									<!-- ko if: typeof createdBy() != 'undefined' -->
-									<p id="space-created-by" class="form-control-static" data-bind="text: createdBy().fullName"></p>
-									<!-- /ko -->
+									<label for="space-title">Title</label>
+									<input type="text" class="form-control" id="space-title" placeholder="Enter title" data-bind="textInput: title">
 								</div>
-							  <div class="form-group">
-							    <label for="space-title">Title</label>
-							    <input type="text" class="form-control" id="space-title" placeholder="Enter title" data-bind="textInput: title">
-							  </div>
-							  <div class="form-group">
-							    <label for="space-description">Description</label>
-							    <textarea class="form-control" id="space-description" rows="3" data-bind="textInput: description"></textarea>
-							  </div>
+								<div class="form-group">
+									<label for="space-description">Description</label>
+									<textarea class="form-control" id="space-description" rows="3" data-bind="textInput: description"></textarea>
+								</div>
+								<div class="form-group">
+									<label for="space-tags">Tags</label>
+									<input type="text" class="form-control" id="space-tags" placeholder="Enter tags (comma-separated, no spaces)" data-bind="textInput: tagsInput">
+								</div>
 								<hr />
 								<div class="form-check">
 									<label class="form-check-label">
 										<input type="checkbox" class="form-check-input" data-bind="checked: welcome">
-										Welcome?
+										Welcome Space
 									</label>
 								</div>
 								<div class="form-check">
 									<label class="form-check-label">
 										<input type="checkbox" class="form-check-input" data-bind="checked: private">
-										Private?
+										Private Space
 									</label>
 								</div>
 								<div class="form-check">
 									<label class="form-check-label">
 										<input type="checkbox" class="form-check-input" data-bind="checked: featured">
-										Featured?
+										Featured Space
 									</label>
 								</div>
 								<hr />
@@ -139,16 +130,137 @@
 									<select class="form-control" multiple="true" data-bind="options: Users.all, optionsText: 'fullName', selectedOptions: members"></select>
 								</div>
 							</form>
-			      </div>
-			      <div class="modal-footer">
-			        <button type="button" class="btn btn-primary" data-bind="click: submit">Save changes</button>
-			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-			      </div>
-			    </div>
-			  </div>
-				<!-- /ko -->
+						</div>
+						<div class="modal-footer">
+							<!-- ko if: id -->
+							<button type="button" class="btn btn-link" data-bind="click: remove">Delete</button>
+							<!-- /ko -->
+							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary" data-bind="click: submit">Save changes</button>
+						</div>
+					</div>
+				</div>
 			</div>
-    </main>
+		</script>
+
+		<script id="spaces-cards-template" type="text/template">
+			<div class="as-spaces row" data-bind="visible: spaces.loaded(), template: {name: 'spaces-card-template', foreach: spaces.allFiltered}" style="display: none;"></div>
+		</script>
+
+		<script id="spaces-card-template" type="text/template">
+			<div class="col-md-4 col-sm-6 mb-4">
+				<div class="card card-space" data-bind="css: classes">
+					<div class="card-header text-uppercase" data-bind="visible: welcome">
+						<span class="fa fa-home fa-fw"></span> Welcome
+					</div>
+					<div class="card-header text-uppercase" data-bind="visible: featured">
+						<span class="fa fa-star fa-fw"></span> Featured
+					</div>
+					<div class="card-header text-uppercase" data-bind="visible: private">
+						<span class="fa fa-lock fa-fw"></span> Private
+					</div>
+					<div class="card-block">
+						<h4 class="card-title" data-bind="text: title"></h4>
+						<p class="card-text" data-bind="text: description"></p>
+						<div class="btn-group" role="group">
+
+							<!-- ko if: members().length > 0 -->
+							<div class="btn-group" role="group">
+								<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Members
+								</button>
+								<div class="dropdown-menu" data-bind="foreach: members">
+									<a class="dropdown-item" href="#">
+										<span data-bind="text: fullName"></span>
+										<span class="badge badge-default" data-bind="visible: admin">Admin</span>
+									</a>
+								</div>
+							</div>
+							<!-- /ko -->
+						</div>
+					</div>
+					<!-- ko if: tags().length > 0 -->
+					<div class="card-footer text-muted" data-bind="foreach: tags">
+						<span class="badge badge-pill badge-info" data-bind="text: $data"></span>
+					</div>
+					<!-- /ko -->
+					<div class="card-footer text-muted">
+						<!-- ko if: typeof createdBy() != 'undefined' -->
+						<small>
+							Created by <a href="#" data-bind="text: createdBy().fullName"></a>
+							<span class="badge badge-default" data-bind="visible: createdBy().admin()">Admin</span>
+						</small>
+						<!-- /ko -->
+						<a class="pull-right" href="#" data-bind="click: edit">
+							<span class="fa fa-cog fa-fw"></span> Edit
+						</a>
+					</div>
+				</div>
+			</div>
+		</script>
+
+		<script id="spaces-table-template" type="text/template">
+			<div class="card mb-4">
+				<table class="table table-hover mb-0">
+					<thead>
+						<th></th>
+						<th class="border-top-0">Space</th>
+						<th class="border-top-0">Creator</th>
+						<th class="border-top-0">Flags</th>
+						<th class="border-top-0">Members</th>
+						<th class="border-top-0">Tags</th>
+						<th class="border-top-0"></th>
+					</thead>
+					<tbody data-bind="foreach: spaces.allFiltered">
+						<tr>
+							<td>
+								<input type="checkbox" name="spaces-table-options" data-bind="checked: $root.spaces.selected, checkedValue: $data" />
+							</td>
+							<td>
+								<a class="card-title as-space-title" href="#" data-bind="text: title"></a>
+								<p class="card-text as-space-description" data-bind="text: description"></p>
+							</td>
+							<td>
+								<!-- ko if: typeof createdBy() != 'undefined' -->
+								<a href="#">
+									<span data-bind="text: createdBy().fullName"></span>
+									<span class="badge badge-default" data-bind="visible: createdBy().admin">Admin</span>
+								</a>
+								<!-- /ko -->
+							</td>
+							<td>
+								<span class="badge badge-default text-uppercase" data-bind="visible: welcome">Welcome</span>
+								<span class="badge badge-warning text-uppercase" data-bind="visible: featured">Featured</span>
+								<span class="badge badge-danger text-uppercase" data-bind="visible: private">Private</span>
+							</td>
+							<td>
+								<!-- ko if: members().length > 0 -->
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Members
+									</button>
+									<div class="dropdown-menu dropdown-menu-right" data-bind="foreach: members">
+										<a class="dropdown-item" href="#" data-bind="text: fullName"></a>
+									</div>
+								</div>
+								<!-- /ko -->
+								<!-- ko if: members().length == 0 -->
+									<span class="text-muted">Open to all</span>
+								<!-- /ko -->
+							</td>
+							<td data-bind="foreach: tags">
+								<span class="badge badge-pill badge-info" data-bind="text: $data"></span>
+							</td>
+							<td>
+								<a href="#" data-bind="click: edit">Edit</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</script>
+
+		<!-- JS Libraries -->
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
