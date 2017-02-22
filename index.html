@@ -213,7 +213,7 @@
 								<!-- ko if: typeof createdBy() != 'undefined' -->
 								<a href="#">
 									<span data-bind="text: createdBy().fullName"></span>
-									<span class="badge badge-default" data-bind="visible: createdBy().admin">Admin</span>
+									<span data-bind="visible: createdBy().admin">(Admin)</span>
 								</a>
 								<!-- /ko -->
 							</td>
@@ -257,7 +257,9 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js"></script>
 		<script src="./lib/data/Data.js"></script>
-		<script src="./lib/models.js"></script>
+		<script src="./lib/utils.js"></script>
+		<script src="./lib/models.users.js"></script>
+		<script src="./lib/models.spaces.js"></script>
     <script src="./lib/index.js"></script>
 	</body>
 </html>
