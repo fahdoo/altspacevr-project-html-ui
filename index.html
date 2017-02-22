@@ -109,19 +109,19 @@
 								<div class="form-check">
 									<label class="form-check-label">
 										<input type="checkbox" class="form-check-input" data-bind="checked: welcome">
-										Welcome Space
-									</label>
-								</div>
-								<div class="form-check">
-									<label class="form-check-label">
-										<input type="checkbox" class="form-check-input" data-bind="checked: private">
-										Private Space
+										<span class="fa fa-home fa-fw"></span> Welcome Space
 									</label>
 								</div>
 								<div class="form-check">
 									<label class="form-check-label">
 										<input type="checkbox" class="form-check-input" data-bind="checked: featured">
-										Featured Space
+										<span class="fa fa-star fa-fw"></span> Featured Space
+									</label>
+								</div>
+								<div class="form-check">
+									<label class="form-check-label">
+										<input type="checkbox" class="form-check-input" data-bind="checked: private">
+										<span class="fa fa-lock fa-fw"></span> Private Space
 									</label>
 								</div>
 								<hr />
@@ -160,7 +160,7 @@
 						<span class="fa fa-lock fa-fw"></span> Private
 					</div>
 					<div class="card-block">
-						<h4 class="card-title" data-bind="text: title"></h4>
+						<a class="h4 card-title" data-bind="click: edit, text: title"></a>
 						<p class="card-text" data-bind="text: description"></p>
 						<div class="btn-group" role="group">
 
@@ -217,7 +217,7 @@
 								<input type="checkbox" name="spaces-table-options" data-bind="checked: $root.spaces.selected, checkedValue: $data" />
 							</td>
 							<td>
-								<a class="card-title as-space-title" href="#" data-bind="text: title"></a>
+								<a class="card-title as-space-title" href="#" data-bind="click: edit, text: title"></a>
 								<p class="card-text as-space-description" data-bind="text: description"></p>
 							</td>
 							<td>
